@@ -1,35 +1,33 @@
 # Scrambled
 
-Recreation of scrambled hacks.  
+Recreation of scrambled hacks.
 
-[https://www.youtube.com/watch?v=eRlhKaxcKpA](https://www.youtube.com/watch?v=eRlhKaxcKpA)  
+## Finished
+
+- [x] Semgent audio into quarters
+- [ ] Segment audio into eigths
+- [ ] Segment audio into sixteenths
+
+## Next
+
+Tacotron prosody transfer experiments showwed modified vggnet architecture modeled prosody well. This technique for extracting the audio signature could possibly make this work for speech - something the original incarnation could not do well.
+
+For music, understand and adapt the approach used here: https://github.com/worldveil/dejavu
+
+## Notes
+
+[https://www.youtube.com/watch?v=eRlhKaxcKpA](https://www.youtube.com/watch?v=eRlhKaxcKpA)
 
 - Get BPM  
-https://librosa.github.io/librosa/generated/librosa.beat.tempo.html#librosa.beat.tempo
+  https://librosa.github.io/librosa/generated/librosa.beat.tempo.html#librosa.beat.tempo
 - Segment into 1/4 notes, 1/8 notes, 1/16 notes
-https://librosa.github.io/librosa/generated/librosa.beat.beat_track.html#librosa.beat.beat_track  
+  https://librosa.github.io/librosa/generated/librosa.beat.beat_track.html#librosa.beat.beat_track
 
-```python
-# Load in the example track and reverse the beats
-y, sr = librosa.load(librosa.util.example_audio_file())
-
-# Compute beats
-_, beat_frames = librosa.beat.beat_track(y=y, sr=sr,
-                                             hop_length=512)
-# Convert from frames to sample indices
-beat_samples = librosa.frames_to_samples(beat_frames)
-# Generate intervals from consecutive events
-intervals = librosa.util.frame(beat_samples, frame_length=2,
-                                   hop_length=1).T
-
-```
-
-- Calculate acoustic signature from each snippet
-- Search segments via acoustic similiarity  
-https://github.com/mattare2/python-acoustic-similarity
-https://librosa.github.io/librosa/generated/librosa.sequence.dtw.html#rf5eb1a10cb06-1  
-https://en.wikipedia.org/wiki/Dynamic_time_warping  
-
+* Calculate acoustic signature from each snippet
+* Search segments via acoustic similiarity  
+  https://github.com/mattare2/python-acoustic-similarity
+  https://librosa.github.io/librosa/generated/librosa.sequence.dtw.html#rf5eb1a10cb06-1  
+  https://en.wikipedia.org/wiki/Dynamic_time_warping
 
 ```
 The optimal match is denoted by the match that satisfies all the restrictions and the rules and that has the minimal cost, where the cost is computed as the sum of absolute differences, for each matched pair of indices, between their values.
@@ -40,9 +38,4 @@ In addition to a similarity measure between the two sequences, a so called "warp
 ```
 
 - Nearest neighbors in mfcc space
-https://librosa.github.io/librosa/generated/librosa.segment.recurrence_matrix.html  
-
-
-
-
-
+  https://librosa.github.io/librosa/generated/librosa.segment.recurrence_matrix.html
