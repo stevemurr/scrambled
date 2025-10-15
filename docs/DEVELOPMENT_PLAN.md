@@ -353,35 +353,91 @@ class SimpleConcatenation(ReconstructionModule):
 - Note: Current implementation uses placeholder for segment retrieval (Phase 2 will add proper audio storage)
 - Git commit: 975eab1
 
-### TODO 1.7: Create Simple CLI
-- [ ] Create `cli.py` with basic commands
-- [ ] Implement:
-  - `build-db --input-dir <dir> --output <db_path>`
-  - `generate --input <file> --database <db_path> --output <file>`
-- [ ] Add basic argument validation
-- [ ] Test with example audio
+### TODO 1.7: Enhanced Metadata System
+- [ ] Extend `AudioSegment` metadata:
+  - [ ] Source filename (already tracked)
+  - [ ] Segment index in source (already tracked)
+  - [ ] Timestamp (start/end in seconds) - add helpers
+  - [ ] Beat position (already tracked)
+  - [ ] Energy level (RMS)
+  - [ ] Optional: Extract tempo (BPM) if available
+- [ ] Add metadata extraction to pipeline
+- [ ] Update tests
+- [ ] Document metadata schema
 
-### TODO 1.8: Validation & Comparison
-- [ ] Test with 10-20 diverse songs
-- [ ] Generate outputs with:
-  - Music input → Music database ✓
-  - Vocal input → Music database ✓
-  - Speech input → Music database ✓
-- [ ] Compare with original MFCC+DTW approach (if time)
-- [ ] Document findings
+**Code Structure:**
+```python
+# Enhanced metadata in AudioSegment
+metadata = {
+    'source_file': 'song.wav',
+    'segment_index': 0,
+    'beat_position': 0,
+    'start_time': 0.0,      # NEW: seconds
+    'end_time': 0.5,        # NEW: seconds
+    'duration': 0.5,        # NEW: seconds
+    'energy_rms': 0.234,    # NEW: RMS energy
+    'tempo_bpm': 120.0,     # NEW: optional
+}
+```
 
-**Success Criteria:**
+### TODO 1.8: Upgrade to HNSW Index
+- [ ] Database already supports IndexHNSWFlat (implemented in 1.4)
+- [ ] Update pipeline to use HNSW for larger databases
+- [ ] Benchmark search speed: Flat vs HNSW
+- [ ] Document when to use each index type
+- [ ] Add index selection helper based on database size
+
+**Note:** SegmentDatabase already supports both `index_type="flat"` and `index_type="hnsw"`. 
+This task is primarily about benchmarking and documentation.
+
+### TODO 1.9: Build Production POC Database
+- [ ] Process all 26 audio files from `test_audio/`
+- [ ] Files are already at 48kHz (CLAP's expected rate) - no resampling needed
+- [ ] Build database with enhanced metadata
+- [ ] Use IndexHNSWFlat for better search performance
+- [ ] Save to `databases/poc_db/`
+- [ ] Generate statistics report:
+  - [ ] Number of segments
+  - [ ] Average segment duration
+  - [ ] Duration distribution
+  - [ ] Source file coverage
+  - [ ] Database size on disk
+- [ ] Test database with sample queries
+- [ ] Document database characteristics
+
+**Expected Results:**
+- ~26 songs × ~500-2000 segments/song = **13,000-52,000 segments**
+- Perfect for IndexHNSWFlat (100K-10M vector range)
+- Database ready for real testing and CLI development
+
+### TODO 1.10: Simple CLI Tool
+- [ ] Create `cli.py` with Click framework
+- [ ] Implement basic commands:
+  ```bash
+  scrambled-hacks build-db --input-dir <dir> --output <db>
+  scrambled-hacks generate --input <file> --db <db> --output <file>
+  scrambled-hacks info --db <db>  # Show database stats
+  ```
+- [ ] Add progress bars and logging
+- [ ] Add `--help` documentation
+- [ ] Test with POC database from 1.9
+- [ ] Create example workflow script
+
+**Phase 1 Completion Success Criteria:**
+- ✅ All core components implemented and tested
 - ✅ CLAP embeddings extract successfully
 - ✅ FAISS search returns reasonable matches
-- ✅ Output audio is generated without errors
-- ✅ Non-music inputs (vocals/speech) work with music database
+- ✅ Real database built from 26 diverse songs
+- ✅ CLI tool works with real database
+- ✅ Can generate audio end-to-end via CLI
 - ✅ Quality is subjectively good (musical segments match input rhythm)
 
-**Deliverables:**
-- Working Python package with core modules
-- Simple CLI tool
-- Test suite
-- Sample outputs for evaluation
+**Phase 1 Deliverables:**
+- Working Python package with all core modules
+- Production POC database (~13K-52K segments)
+- Functional CLI tool
+- Comprehensive test suite
+- Example outputs and workflows
 
 ---
 
