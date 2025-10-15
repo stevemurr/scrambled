@@ -1,1 +1,3 @@
-"""FAISS-based segment database for similarity search."""
+from .segment_db import SegmentDatabase
+
+__all__ = ['SegmentDatabase']
