@@ -341,3 +341,44 @@ class SegmentDatabase:
             f"embedding_dim={self.embedding_dim}, "
             f"size={self.size})"
         )
+
+
+def recommend_index_type(expected_segments: int) -> tuple:
+    """Recommend FAISS index type based on expected database size.
+
+    Based on benchmarks and FAISS documentation:
+    - IndexFlatL2: Best for <10K segments (exact search, simple, fast for small datasets)
+    - IndexHNSWFlat: Best for 10K-1M segments (fast approximate search, good recall)
+    - IndexIVFPQ: Best for >1M segments (memory efficient, requires training)
+
+    Args:
+        expected_segments: Expected number of segments in the database
+
+    Returns:
+        Tuple of (index_type: str, reason: str)
+
+    Examples:
+        >>> recommend_index_type(5000)
+        ('flat', 'Small database (<10K segments): Use exact search for simplicity')
+
+        >>> recommend_index_type(50000)
+        ('hnsw', 'Medium database (10K-1M segments): Use HNSW for fast search')
+    """
+    if expected_segments < 10000:
+        return (
+            "flat",
+            f"Small database ({expected_segments:,} segments < 10K): "
+            "Use exact search for simplicity and 100% accuracy"
+        )
+    elif expected_segments < 1000000:
+        return (
+            "hnsw",
+            f"Medium database ({expected_segments:,} segments in 10K-1M range): "
+            "Use HNSW for fast approximate search with high recall"
+        )
+    else:
+        return (
+            "ivfpq",
+            f"Large database ({expected_segments:,} segments > 1M): "
+            "Consider IndexIVFPQ for memory efficiency (not yet implemented)"
+        )

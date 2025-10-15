@@ -4,7 +4,7 @@ import tempfile
 import shutil
 from pathlib import Path
 
-from scrambled_hacks.database import SegmentDatabase
+from scrambled_hacks.database import SegmentDatabase, recommend_index_type
 from scrambled_hacks.segmentation import AudioSegment
 
 
@@ -424,6 +424,49 @@ class TestDatabaseIntegration:
         # L2 distance for random vectors is typically around sqrt(dim) ≈ 22-23
         # But with random variation, can be larger
         assert all(d < 2000 for d in distances)  # Generous threshold for random embeddings
+
+
+def test_recommend_index_type_small():
+    """Test recommend_index_type for small databases."""
+    index_type, reason = recommend_index_type(5000)
+    assert index_type == "flat"
+    assert "5,000" in reason
+    assert "10K" in reason
+
+
+def test_recommend_index_type_medium():
+    """Test recommend_index_type for medium databases."""
+    index_type, reason = recommend_index_type(50000)
+    assert index_type == "hnsw"
+    assert "50,000" in reason
+    assert "10K-1M" in reason
+
+
+def test_recommend_index_type_large():
+    """Test recommend_index_type for large databases."""
+    index_type, reason = recommend_index_type(2000000)
+    assert index_type == "ivfpq"
+    assert "2,000,000" in reason
+    assert "1M" in reason
+
+
+def test_recommend_index_type_boundary_cases():
+    """Test recommend_index_type at boundary values."""
+    # Just below 10K threshold
+    index_type, _ = recommend_index_type(9999)
+    assert index_type == "flat"
+
+    # At 10K threshold
+    index_type, _ = recommend_index_type(10000)
+    assert index_type == "hnsw"
+
+    # Just below 1M threshold
+    index_type, _ = recommend_index_type(999999)
+    assert index_type == "hnsw"
+
+    # At 1M threshold
+    index_type, _ = recommend_index_type(1000000)
+    assert index_type == "ivfpq"
 
 
 if __name__ == "__main__":
