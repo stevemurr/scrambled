@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scrambled-hacks"
+version = "0.1.0"
+description = "ML-based audio scrambling system using CLAP embeddings and FAISS"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["audio", "music", "machine-learning", "embeddings", "clap", "faiss"]
+
+dependencies = [
+    # Core audio processing
+    "librosa>=0.10.0",
+    "soundfile>=0.12.0",
+    "numpy>=1.24.0,<2.0",
+    "scipy>=1.11.0",
+
+    # Machine Learning
+    "torch>=2.0.0",
+    "transformers>=4.30.0",
+    "faiss-cpu>=1.7.4",
+
+    # CLI & Utilities
+    "click>=8.1.0",
+    "tqdm>=4.65.0",
+    "loguru>=0.7.0",
+    "pyyaml>=6.0",
+
+    # Data structures
+    "dataclasses-json>=0.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.5.0",
+]
+
+docs = [
+    "sphinx>=7.1.0",
+    "sphinx-rtd-theme>=1.3.0",
+]
+
+# Optional: GPU support (NVIDIA only, not for Apple Silicon)
+gpu = [
+    "faiss-gpu>=1.7.4",
+]
+
+[project.scripts]
+scrambled-hacks = "scrambled_hacks.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["scrambled_hacks*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=scrambled_hacks --cov-report=term-missing"
