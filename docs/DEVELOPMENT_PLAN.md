@@ -298,7 +298,7 @@ class SegmentDatabase:
 - 23 unit tests, 100% pass rate
 - 95% coverage on simple.py, 88% on base.py
 - Tests include crossfade smoothness validation
-- Git commit: [pending]
+- Git commit: a22d6d4
 
 **Code Structure:**
 ```python
@@ -875,7 +875,7 @@ scrambled-hacks/
   - Crossfading with linear fades
   - Optional normalization
   - 23 tests, 100% pass rate, 95% coverage
-  - Git commit: [pending]
+  - Git commit: a22d6d4
   
 - ⏳ **TODO 1.6: End-to-End Pipeline** - Not started
 - ⏳ **TODO 1.7: Simple CLI** - Not started
