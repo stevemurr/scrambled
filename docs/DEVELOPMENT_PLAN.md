@@ -253,7 +253,7 @@ class ClapEmbedder:
 - 27 unit tests, 100% pass rate, 96% coverage
 - Metadata independence (deep copy)
 - Proper error handling and validation
-- Git commit: [pending]
+- Git commit: 99f42e1
 
 **Code Structure:**
 ```python
@@ -856,7 +856,7 @@ scrambled-hacks/
   - SegmentDatabase class with IndexFlatL2 and IndexHNSWFlat support
   - Complete save/load functionality
   - 27 tests, 100% pass rate, 96% coverage
-  - Git commit: [pending]
+  - Git commit: 99f42e1
   
 - ⏳ **TODO 1.5: Simple Reconstruction Module** - Not started
 - ⏳ **TODO 1.6: End-to-End Pipeline** - Not started
