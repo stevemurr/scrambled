@@ -160,15 +160,26 @@ class LearnedReconstructionModule(ReconstructionModule):
 - Tests passing: 2/2 import tests
 - Git commit: f3222a5
 
-### TODO 1.2: Implement CLAP Embedding Extractor
-- [ ] Create `embeddings/clap_embedder.py` module
-- [ ] Implement `ClapEmbedder` class:
-  - [ ] `__init__`: Load model and processor
-  - [ ] `embed_audio(audio, sr)`: Extract embeddings from audio array
-  - [ ] `embed_file(filepath)`: Load audio and extract embeddings
-  - [ ] Handle batch processing for efficiency
-- [ ] Add proper device handling (CPU/MPS)
-- [ ] Write unit tests with sample audio
+### TODO 1.2: Implement CLAP Embedding Extractor ✅ COMPLETE
+- [x] Create `embeddings/clap_embedder.py` module
+- [x] Implement `ClapEmbedder` class:
+  - [x] `__init__`: Load model and processor
+  - [x] `embed_audio(audio, sr)`: Extract embeddings from audio array
+  - [x] `embed_file(filepath)`: Load audio and extract embeddings
+  - [x] Handle batch processing for efficiency
+- [x] Add proper device handling (CPU/MPS)
+- [x] Write unit tests with sample audio
+
+**Completed:** 2025-10-15  
+**Details:**
+- Implemented ClapEmbedder with full API (embed_audio, embed_file, embed_batch)
+- Auto-detect device (CPU/CUDA/MPS) with fallback
+- 512-dimensional embeddings from CLAP projection layer
+- Supports mono/stereo audio with automatic conversion
+- Batch processing for efficiency
+- 11 unit tests, 100% pass rate, 83% coverage
+- Fixed deprecation warnings (audio vs audios parameter)
+- Git commit: 8f85203
 
 **Code Structure:**
 ```python
@@ -808,7 +819,11 @@ scrambled-hacks/
   - CLI functional, tests passing
   - Git commit: f3222a5
   
-- ⏳ **TODO 1.2: CLAP Embedding Extractor** - Not started
+- ✅ **TODO 1.2: CLAP Embedding Extractor** - Completed 2025-10-15
+  - ClapEmbedder class with full API
+  - Auto-detect device (CPU/CUDA/MPS)
+  - 11 tests, 100% pass rate
+  - Git commit: 8f85203
 - ⏳ **TODO 1.3: Segment Extraction** - Not started
 - ⏳ **TODO 1.4: Basic FAISS Database** - Not started
 - ⏳ **TODO 1.5: Simple Reconstruction Module** - Not started
@@ -816,4 +831,4 @@ scrambled-hacks/
 - ⏳ **TODO 1.7: Simple CLI** - Not started
 - ⏳ **TODO 1.8: Validation & Comparison** - Not started
 
-**Phase 1 Status:** 1/8 tasks complete (12.5%)
+**Phase 1 Status:** 2/8 tasks complete (25.0%)
