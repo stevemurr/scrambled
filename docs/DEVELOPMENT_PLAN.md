@@ -351,7 +351,7 @@ class SimpleConcatenation(ReconstructionModule):
 - 20 integration tests (11 fast, 9 slow with @pytest.mark.slow)
 - Tests cover initialization, database building, generation, save/load
 - Note: Current implementation uses placeholder for segment retrieval (Phase 2 will add proper audio storage)
-- Git commit: [pending]
+- Git commit: 975eab1
 
 ### TODO 1.7: Create Simple CLI
 - [ ] Create `cli.py` with basic commands
@@ -895,7 +895,7 @@ scrambled-hacks/
   - build_database() and generate() methods
   - Logging (loguru) and progress bars (tqdm)
   - 20 integration tests
-  - Git commit: [pending]
+  - Git commit: 975eab1
   
 - ⏳ **TODO 1.7: Simple CLI** - Not started
 - ⏳ **TODO 1.8: Validation & Comparison** - Not started
