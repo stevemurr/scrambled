@@ -204,13 +204,13 @@ class ClapEmbedder:
         return embeddings.cpu().numpy()
 ```
 
-### TODO 1.3: Implement Segment Extraction
-- [ ] Create `segmentation/segmenter.py` module
-- [ ] Implement beat detection (keep from original):
-  - [ ] Use librosa onset detection
-  - [ ] Extract beat timestamps
-  - [ ] Segment audio by beats (quarter notes initially)
-- [ ] Create `AudioSegment` dataclass:
+### TODO 1.3: Implement Segment Extraction ✅ COMPLETE
+- [x] Create `segmentation/segmenter.py` module
+- [x] Implement beat detection (keep from original):
+  - [x] Use librosa onset detection
+  - [x] Extract beat timestamps
+  - [x] Segment audio by beats (quarter notes initially)
+- [x] Create `AudioSegment` dataclass:
   ```python
   @dataclass
   class AudioSegment:
@@ -221,7 +221,18 @@ class ClapEmbedder:
       embedding: np.ndarray    # CLAP embedding
       metadata: dict           # Source file, timestamps, etc.
   ```
-- [ ] Write tests with example audio files
+- [x] Write tests with example audio files
+
+**Completed:** 2025-10-15  
+**Details:**
+- Implemented AudioSegment dataclass with validation and properties
+- Implemented Segmenter with librosa onset detection
+- Beat-based segmentation (quarter notes)
+- Handles mono/stereo, file/array input
+- 18 unit tests, 100% pass rate
+- 97% coverage on AudioSegment, 85% on Segmenter
+- Comprehensive metadata tracking
+- Git commit: f1b4e90
 
 ### TODO 1.4: Implement Basic FAISS Database
 - [ ] Create `database/segment_db.py` module
@@ -824,11 +835,16 @@ scrambled-hacks/
   - Auto-detect device (CPU/CUDA/MPS)
   - 11 tests, 100% pass rate
   - Git commit: 8f85203
-- ⏳ **TODO 1.3: Segment Extraction** - Not started
+
+- ✅ **TODO 1.3: Segment Extraction** - Completed 2025-10-15
+  - AudioSegment dataclass + Segmenter class
+  - Librosa onset detection for beats
+  - 18 tests, 100% pass rate
+  - Git commit: f1b4e90
 - ⏳ **TODO 1.4: Basic FAISS Database** - Not started
 - ⏳ **TODO 1.5: Simple Reconstruction Module** - Not started
 - ⏳ **TODO 1.6: End-to-End Pipeline** - Not started
 - ⏳ **TODO 1.7: Simple CLI** - Not started
 - ⏳ **TODO 1.8: Validation & Comparison** - Not started
 
-**Phase 1 Status:** 2/8 tasks complete (25.0%)
+**Phase 1 Status:** 3/8 tasks complete (37.5%)
