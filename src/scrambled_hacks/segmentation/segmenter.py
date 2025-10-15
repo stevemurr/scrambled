@@ -28,7 +28,8 @@ class Segmenter:
         self,
         hop_length: int = 512,
         backtrack: bool = True,
-        units: str = "beats"
+        units: str = "beats",
+        extract_tempo: bool = True
     ):
         """Initialize segmenter.
 
@@ -36,10 +37,12 @@ class Segmenter:
             hop_length: Hop length for STFT analysis (default: 512 samples)
             backtrack: If True, backtrack onsets to nearest energy minimum
             units: Segmentation units - 'beats' for quarter notes (future: 'eighth', 'sixteenth')
+            extract_tempo: If True, extract tempo (BPM) from audio and add to metadata
         """
         self.hop_length = hop_length
         self.backtrack = backtrack
         self.units = units
+        self.extract_tempo = extract_tempo
 
         if units not in ["beats"]:
             # Future: support "eighth", "sixteenth"
@@ -75,6 +78,19 @@ class Segmenter:
             logger.debug(f"Converting {audio.ndim}-channel audio to mono")
             audio = librosa.to_mono(audio.T)
 
+        # Extract tempo if requested
+        tempo_bpm = None
+        if self.extract_tempo:
+            try:
+                logger.debug("Extracting tempo")
+                tempo, _ = librosa.beat.beat_track(y=audio, sr=sr, hop_length=self.hop_length)
+                # Convert to float, handling both scalar and array returns
+                tempo_bpm = float(tempo.item() if hasattr(tempo, 'item') else tempo)
+                logger.info(f"Detected tempo: {tempo_bpm:.1f} BPM")
+            except Exception as e:
+                logger.warning(f"Failed to extract tempo: {e}")
+                tempo_bpm = None
+
         # Detect onsets (beat positions)
         logger.debug(f"Detecting onsets with hop_length={self.hop_length}")
         onset_frames = librosa.onset.onset_detect(
@@ -87,6 +103,17 @@ class Segmenter:
 
         if len(onset_frames) == 0:
             logger.warning("No onsets detected, returning single segment")
+            # Create metadata dict
+            metadata = {
+                "source_file": source_file,
+                "segment_index": 0,
+                "num_segments": 1,
+            }
+
+            # Add tempo if extracted
+            if tempo_bpm is not None:
+                metadata["tempo_bpm"] = tempo_bpm
+
             # Return entire audio as one segment
             return [
                 AudioSegment(
@@ -94,11 +121,7 @@ class Segmenter:
                     start_sample=0,
                     end_sample=len(audio),
                     sr=sr,
-                    metadata={
-                        "source_file": source_file,
-                        "segment_index": 0,
-                        "num_segments": 1,
-                    }
+                    metadata=metadata
                 )
             ]
 
@@ -118,17 +141,24 @@ class Segmenter:
                 logger.debug(f"Skipping empty segment {i}")
                 continue
 
+            # Create metadata dict
+            metadata = {
+                "source_file": source_file,
+                "segment_index": i,
+                "beat_position": i,
+            }
+
+            # Add tempo if extracted
+            if tempo_bpm is not None:
+                metadata["tempo_bpm"] = tempo_bpm
+
             # Create AudioSegment
             segment = AudioSegment(
                 audio=segment_audio,
                 start_sample=int(start_sample),
                 end_sample=int(end_sample),
                 sr=sr,
-                metadata={
-                    "source_file": source_file,
-                    "segment_index": i,
-                    "beat_position": i,
-                }
+                metadata=metadata
             )
             segments.append(segment)
 
@@ -139,16 +169,23 @@ class Segmenter:
             segment_audio = audio[start_sample:end_sample]
 
             if segment_audio.size > 0:
+                # Create metadata dict
+                metadata = {
+                    "source_file": source_file,
+                    "segment_index": len(onset_frames) - 1,
+                    "beat_position": len(onset_frames) - 1,
+                }
+
+                # Add tempo if extracted
+                if tempo_bpm is not None:
+                    metadata["tempo_bpm"] = tempo_bpm
+
                 segment = AudioSegment(
                     audio=segment_audio,
                     start_sample=int(start_sample),
                     end_sample=int(end_sample),
                     sr=sr,
-                    metadata={
-                        "source_file": source_file,
-                        "segment_index": len(onset_frames) - 1,
-                        "beat_position": len(onset_frames) - 1,
-                    }
+                    metadata=metadata
                 )
                 segments.append(segment)
 
@@ -203,5 +240,6 @@ class Segmenter:
     def __repr__(self) -> str:
         return (
             f"Segmenter(hop_length={self.hop_length}, "
-            f"backtrack={self.backtrack}, units='{self.units}')"
+            f"backtrack={self.backtrack}, units='{self.units}', "
+            f"extract_tempo={self.extract_tempo})"
         )

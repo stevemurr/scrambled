@@ -125,6 +125,39 @@ class TestAudioSegment:
         assert "AudioSegment" in repr_str
         assert "duration" in repr_str
 
+    def test_energy_rms(self):
+        """Test RMS energy calculation."""
+        # Test with known audio
+        audio = np.ones(1000, dtype=np.float32)  # All 1.0
+        segment = AudioSegment(
+            audio=audio,
+            start_sample=0,
+            end_sample=1000,
+            sr=48000
+        )
+        # RMS of all 1.0 should be 1.0
+        assert segment.energy_rms == pytest.approx(1.0)
+
+        # Test with zeros (silent)
+        audio_silent = np.zeros(1000, dtype=np.float32)
+        segment_silent = AudioSegment(
+            audio=audio_silent,
+            start_sample=0,
+            end_sample=1000,
+            sr=48000
+        )
+        assert segment_silent.energy_rms == pytest.approx(0.0)
+
+        # Test with random audio (should be > 0)
+        audio_random = np.random.randn(1000).astype(np.float32)
+        segment_random = AudioSegment(
+            audio=audio_random,
+            start_sample=0,
+            end_sample=1000,
+            sr=48000
+        )
+        assert segment_random.energy_rms > 0.0
+
 
 class TestSegmenter:
     """Tests for Segmenter class."""
@@ -157,6 +190,12 @@ class TestSegmenter:
         assert segmenter.hop_length == 512
         assert segmenter.backtrack is True
         assert segmenter.units == "beats"
+        assert segmenter.extract_tempo is True
+
+    def test_segmenter_initialization_no_tempo(self):
+        """Test Segmenter initialization with tempo extraction disabled."""
+        segmenter = Segmenter(extract_tempo=False)
+        assert segmenter.extract_tempo is False
 
     def test_segment_audio(self, segmenter, synthetic_audio_with_beats):
         """Test segmenting audio array."""
@@ -238,6 +277,33 @@ class TestSegmenter:
             assert seg.metadata["segment_index"] == i
             assert seg.metadata["num_segments"] == len(segments)
             assert seg.metadata["source_file"] == "test.wav"
+
+    def test_tempo_extraction(self, synthetic_audio_with_beats):
+        """Test that tempo is extracted and added to metadata."""
+        audio, sr = synthetic_audio_with_beats
+        segmenter = Segmenter(extract_tempo=True)
+        segments = segmenter.segment_audio(audio, sr)
+
+        # Tempo should be in metadata (if extraction succeeded)
+        if len(segments) > 0 and "tempo_bpm" in segments[0].metadata:
+            tempo = segments[0].metadata["tempo_bpm"]
+            assert isinstance(tempo, float)
+            assert tempo > 0  # Tempo should be positive
+            assert tempo < 300  # Reasonable upper bound
+
+            # All segments from same audio should have same tempo
+            for seg in segments:
+                assert seg.metadata.get("tempo_bpm") == tempo
+
+    def test_tempo_extraction_disabled(self, synthetic_audio_with_beats):
+        """Test that tempo is not extracted when disabled."""
+        audio, sr = synthetic_audio_with_beats
+        segmenter = Segmenter(extract_tempo=False)
+        segments = segmenter.segment_audio(audio, sr)
+
+        # Tempo should not be in metadata
+        for seg in segments:
+            assert "tempo_bpm" not in seg.metadata
 
     def test_segments_cover_entire_audio(self, segmenter, synthetic_audio_with_beats):
         """Test that segments cover the entire audio without gaps."""

@@ -353,17 +353,28 @@ class SimpleConcatenation(ReconstructionModule):
 - Note: Current implementation uses placeholder for segment retrieval (Phase 2 will add proper audio storage)
 - Git commit: 975eab1
 
-### TODO 1.7: Enhanced Metadata System
-- [ ] Extend `AudioSegment` metadata:
-  - [ ] Source filename (already tracked)
-  - [ ] Segment index in source (already tracked)
-  - [ ] Timestamp (start/end in seconds) - add helpers
-  - [ ] Beat position (already tracked)
-  - [ ] Energy level (RMS)
-  - [ ] Optional: Extract tempo (BPM) if available
-- [ ] Add metadata extraction to pipeline
-- [ ] Update tests
-- [ ] Document metadata schema
+### TODO 1.7: Enhanced Metadata System ✅ COMPLETE
+- [x] Extend `AudioSegment` metadata:
+  - [x] Source filename (already tracked)
+  - [x] Segment index in source (already tracked)
+  - [x] Timestamp (start/end in seconds) - add helpers
+  - [x] Beat position (already tracked)
+  - [x] Energy level (RMS)
+  - [x] Optional: Extract tempo (BPM) if available
+- [x] Add metadata extraction to pipeline
+- [x] Update tests
+- [x] Document metadata schema
+
+**Completed:** 2025-10-15  
+**Details:**
+- Added `energy_rms` property to AudioSegment (computes RMS energy)
+- Time-based properties already existed: `start_time`, `end_time`, `duration_seconds`
+- Added `extract_tempo` parameter to Segmenter (default: True)
+- Segmenter now extracts tempo (BPM) using librosa.beat.beat_track
+- Tempo added to metadata dict for all segments from same audio
+- Added 4 new tests: energy_rms, tempo extraction, tempo disabled, init with tempo flag
+- All 22 tests passing
+- Fixed numpy deprecation warning for tempo conversion
 
 **Code Structure:**
 ```python
@@ -372,12 +383,14 @@ metadata = {
     'source_file': 'song.wav',
     'segment_index': 0,
     'beat_position': 0,
-    'start_time': 0.0,      # NEW: seconds
-    'end_time': 0.5,        # NEW: seconds
-    'duration': 0.5,        # NEW: seconds
-    'energy_rms': 0.234,    # NEW: RMS energy
-    'tempo_bpm': 120.0,     # NEW: optional
+    'tempo_bpm': 120.0,     # NEW: optional (if extract_tempo=True)
 }
+
+# Properties available on AudioSegment:
+segment.start_time        # seconds (from start_sample / sr)
+segment.end_time          # seconds (from end_sample / sr)
+segment.duration_seconds  # seconds (computed)
+segment.energy_rms        # RMS energy (computed from audio)
 ```
 
 ### TODO 1.8: Upgrade to HNSW Index
@@ -952,8 +965,16 @@ scrambled-hacks/
   - Logging (loguru) and progress bars (tqdm)
   - 20 integration tests
   - Git commit: 975eab1
-  
-- ⏳ **TODO 1.7: Simple CLI** - Not started
-- ⏳ **TODO 1.8: Validation & Comparison** - Not started
 
-**Phase 1 Status:** 6/8 tasks complete (75%)
+- ✅ **TODO 1.7: Enhanced Metadata System** - Completed 2025-10-15
+  - Added energy_rms property to AudioSegment
+  - Added tempo extraction to Segmenter
+  - Time-based properties (start_time, end_time, duration_seconds)
+  - 4 new tests, all 22 tests passing
+  - Git commit: [pending]
+  
+- ⏳ **TODO 1.8: Upgrade to HNSW Index** - Not started
+- ⏳ **TODO 1.9: Build Production POC Database** - Not started
+- ⏳ **TODO 1.10: Simple CLI Tool** - Not started
+
+**Phase 1 Status:** 7/10 tasks complete (70%)

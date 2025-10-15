@@ -66,6 +66,18 @@ class AudioSegment:
         """Check if embedding has been computed."""
         return self.embedding is not None
 
+    @property
+    def energy_rms(self) -> float:
+        """RMS (Root Mean Square) energy of the audio segment.
+
+        Returns a measure of the average energy/loudness of the segment.
+        Higher values indicate louder segments.
+
+        Returns:
+            RMS energy as a float
+        """
+        return float(np.sqrt(np.mean(self.audio ** 2)))
+
     def __repr__(self) -> str:
         return (
             f"AudioSegment("
