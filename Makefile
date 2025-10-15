@@ -1,4 +1,4 @@
-.PHONY: env install install-dev clean test format lint help
+.PHONY: help env install install-dev clean test format lint verify-clap
 
 # Default Python interpreter
 PYTHON := python3
@@ -6,25 +6,16 @@ VENV := venv
 VENV_BIN := $(VENV)/bin
 PIP := $(VENV_BIN)/pip
 
-help:
+.DEFAULT_GOAL := help
+
+help: ## Show this help message
 	@echo "Scrambled Hacks - Development Commands"
 	@echo ""
-	@echo "Setup:"
-	@echo "  make env          Create virtual environment and install dependencies"
-	@echo "  make install      Install package in development mode"
-	@echo "  make install-dev  Install package with dev dependencies"
-	@echo ""
-	@echo "Development:"
-	@echo "  make test         Run tests with pytest"
-	@echo "  make format       Format code with black and isort"
-	@echo "  make lint         Run linters (flake8, mypy)"
-	@echo "  make clean        Remove virtual environment and cache files"
-	@echo ""
-	@echo "Verification:"
-	@echo "  make verify-clap  Test CLAP model loading"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
-env: clean
+env: clean ## Create virtual environment and install all dependencies
 	@echo "Creating virtual environment..."
 	$(PYTHON) -m venv $(VENV)
 	@echo "Upgrading pip..."
@@ -39,15 +30,15 @@ env: clean
 	@echo "Activate with: source $(VENV_BIN)/activate"
 	@echo "Run 'make verify-clap' to test CLAP model loading"
 
-install:
+install: ## Install package in development mode
 	@echo "Installing package in development mode..."
 	$(PIP) install -e .
 
-install-dev:
+install-dev: ## Install package with dev dependencies (black, pytest, etc.)
 	@echo "Installing package with dev dependencies..."
 	$(PIP) install -e ".[dev]"
 
-verify-clap:
+verify-clap: ## Test CLAP model loading (downloads ~1GB on first run)
 	@echo "Testing CLAP model loading..."
 	@$(VENV_BIN)/python -c "from transformers import ClapModel, ClapProcessor; \
 		print('Loading CLAP model...'); \
@@ -55,21 +46,21 @@ verify-clap:
 		processor = ClapProcessor.from_pretrained('laion/clap-htsat-unfused'); \
 		print('✅ CLAP model loaded successfully!')"
 
-test:
+test: ## Run tests with pytest
 	@echo "Running tests..."
 	$(VENV_BIN)/pytest
 
-format:
+format: ## Format code with black and isort
 	@echo "Formatting code..."
 	$(VENV_BIN)/black src/ tests/
 	$(VENV_BIN)/isort src/ tests/
 
-lint:
+lint: ## Run linters (flake8, mypy)
 	@echo "Running linters..."
 	$(VENV_BIN)/flake8 src/ tests/
 	$(VENV_BIN)/mypy src/
 
-clean:
+clean: ## Remove virtual environment and cache files
 	@echo "Cleaning up..."
 	rm -rf $(VENV)
 	rm -rf build/
