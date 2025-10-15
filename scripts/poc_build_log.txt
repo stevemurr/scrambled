@@ -1,0 +1,84 @@
+2025-10-15 10:13:45.901 | INFO     | __main__:main:28 - ======================================================================
+2025-10-15 10:13:45.901 | INFO     | __main__:main:29 - Building Production POC Database
+2025-10-15 10:13:45.901 | INFO     | __main__:main:30 - ======================================================================
+2025-10-15 10:13:45.902 | INFO     | __main__:main:34 - Found 26 audio files in /Users/murr/Code/scrambled/test_audio
+2025-10-15 10:13:45.902 | INFO     | __main__:main:42 - 
+Audio files:
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    1. Acolyte-LongKissGoodnight.wav (79.9 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    2. CuriousQuail-InstantGratification.wav (84.9 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    3. DoeEye-IHateYou.wav (85.1 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    4. DoeEye-RunRunRun.wav (73.9 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    5. DoeEye-SeaToSee.wav (70.3 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    6. MaxCabello-ChristmasSong.wav (46.8 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    7. MaxCabello-GodIsGoodPop.wav (63.5 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    8. MaxCabello-RollingAndTumbling.wav (60.6 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -    9. Steve-Dreams.wav (93.1 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   10. Steve-StillStanding.wav (43.1 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   11. Steve-Thick.wav (77.5 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   12. TheDystrict-Misery.wav (118.7 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   13. TheDystrict-One Hit.wav (116.9 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   14. TheDystrict-QuarterCenturyLife.wav (71.0 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   15. TheDystrict-Smooth.wav (105.1 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   16. TheHoldup-NotThatGood.wav (62.3 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   17. TheRecordWinter-AreYouReady.wav (102.3 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   18. TheRecordWinter-BeautifulSolitude.wav (92.7 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   19. TheRecordWinter-CocaineSong.wav (57.6 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   20. TheRecordWinter-ConstantComedown.wav (113.3 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   21. TheRecordWinter-DigAHole.wav (75.7 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   22. TheRecordWinter-Junk.wav (56.7 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   23. TheRecordWinter-LetYouBackIn.wav (104.3 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   24. TheRecordWinter-Mannequin.wav (93.6 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   25. TheRecordWinter-SomethingNewSomethingOld.wav (112.7 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:45 -   26. TheRecordWinter-UpTheCoast.wav (83.4 MB)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:51 - 
+Medium database (26,000 segments in 10K-1M range): Use HNSW for fast approximate search with high recall
+2025-10-15 10:13:45.902 | INFO     | __main__:main:52 - Using index type: HNSW
+2025-10-15 10:13:45.902 | INFO     | scrambled_hacks.database.segment_db:__init__:54 - Creating IndexHNSWFlat with dim=512, M=32, efConstruction=40
+2025-10-15 10:13:45.902 | DEBUG    | scrambled_hacks.database.segment_db:__init__:66 - Database initialized: SegmentDatabase(index_type='hnsw', embedding_dim=512, size=0)
+2025-10-15 10:13:45.902 | INFO     | __main__:main:63 - 
+Initializing pipeline...
+2025-10-15 10:13:45.902 | INFO     | scrambled_hacks.embeddings.clap_embedder:__init__:48 - Loading CLAP model: laion/clap-htsat-unfused
+2025-10-15 10:13:45.902 | INFO     | scrambled_hacks.embeddings.clap_embedder:__init__:49 - Using device: cpu
+2025-10-15 10:13:47.639 | INFO     | scrambled_hacks.embeddings.clap_embedder:__init__:62 - CLAP model loaded successfully (embedding_dim=512)
+2025-10-15 10:13:47.639 | INFO     | scrambled_hacks.database.segment_db:__init__:51 - Creating IndexFlatL2 with dim=512
+2025-10-15 10:13:47.639 | DEBUG    | scrambled_hacks.database.segment_db:__init__:66 - Database initialized: SegmentDatabase(index_type='flat', embedding_dim=512, size=0)
+2025-10-15 10:13:47.639 | DEBUG    | scrambled_hacks.reconstruction.simple:__init__:44 - Initialized SimpleConcatenation(crossfade_ms=10.0, normalize=True)
+2025-10-15 10:13:47.639 | INFO     | scrambled_hacks.pipeline:__init__:58 - Initialized pipeline with device=cpu
+2025-10-15 10:13:47.639 | DEBUG    | scrambled_hacks.pipeline:__init__:59 -   Embedder: ClapEmbedder(model_name='laion/clap-htsat-unfused', device='cpu', embedding_dim=512)
+2025-10-15 10:13:47.639 | DEBUG    | scrambled_hacks.pipeline:__init__:60 -   Segmenter: Segmenter(hop_length=512, backtrack=True, units='beats', extract_tempo=True)
+2025-10-15 10:13:47.639 | DEBUG    | scrambled_hacks.pipeline:__init__:61 -   Database: SegmentDatabase(index_type='flat', embedding_dim=512, size=0)
+2025-10-15 10:13:47.639 | DEBUG    | scrambled_hacks.pipeline:__init__:62 -   Reconstructor: SimpleConcatenation(crossfade_ms=10.0, normalize=True)
+2025-10-15 10:13:47.639 | INFO     | __main__:main:70 - 
+Processing 26 audio files...
+2025-10-15 10:13:47.639 | INFO     | __main__:main:71 - This may take several minutes (CLAP embedding extraction is slow)
+2025-10-15 10:13:47.639 | INFO     | __main__:main:72 - ----------------------------------------------------------------------
+2025-10-15 10:13:47.639 | INFO     | scrambled_hacks.pipeline:build_database:96 - Building database from 26 audio files
+Processing files:   0%|          | 0/26 [00:00<?, ?it/s]2025-10-15 10:13:47.651 | DEBUG    | scrambled_hacks.pipeline:build_database:108 - Segmenting Acolyte-LongKissGoodnight.wav
+2025-10-15 10:13:47.652 | INFO     | scrambled_hacks.segmentation.segmenter:segment_file:222 - Loading audio file: /Users/murr/Code/scrambled/test_audio/Acolyte-LongKissGoodnight.wav
+2025-10-15 10:13:47.713 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:78 - Converting 2-channel audio to mono
+2025-10-15 10:13:48.509 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:85 - Extracting tempo
+2025-10-15 10:13:49.925 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:89 - Detected tempo: 110.3 BPM
+2025-10-15 10:13:49.925 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:95 - Detecting onsets with hop_length=512
+2025-10-15 10:13:50.147 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:128 - Detected 269 onsets
+2025-10-15 10:13:50.147 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:196 - Created 269 segments
+2025-10-15 10:13:50.147 | DEBUG    | scrambled_hacks.pipeline:build_database:116 - Extracting embeddings for 269 segments
+2025-10-15 10:14:04.050 | INFO     | scrambled_hacks.database.segment_db:add_segments:140 - Added 269 segments (IDs 0-268)
+Processing files:   0%|          | 0/26 [00:16<?, ?it/s, segments=269, db_size=269]Processing files:   4%|▍         | 1/26 [00:16<06:49, 16.40s/it, segments=269, db_size=269]2025-10-15 10:14:04.051 | DEBUG    | scrambled_hacks.pipeline:build_database:108 - Segmenting CuriousQuail-InstantGratification.wav
+2025-10-15 10:14:04.051 | INFO     | scrambled_hacks.segmentation.segmenter:segment_file:222 - Loading audio file: /Users/murr/Code/scrambled/test_audio/CuriousQuail-InstantGratification.wav
+2025-10-15 10:14:04.124 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:78 - Converting 2-channel audio to mono
+2025-10-15 10:14:04.199 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:85 - Extracting tempo
+2025-10-15 10:14:04.838 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:89 - Detected tempo: 148.0 BPM
+2025-10-15 10:14:04.838 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:95 - Detecting onsets with hop_length=512
+2025-10-15 10:14:05.064 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:128 - Detected 368 onsets
+2025-10-15 10:14:05.064 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:196 - Created 368 segments
+2025-10-15 10:14:05.064 | DEBUG    | scrambled_hacks.pipeline:build_database:116 - Extracting embeddings for 368 segments
+2025-10-15 10:14:27.660 | INFO     | scrambled_hacks.database.segment_db:add_segments:140 - Added 368 segments (IDs 269-636)
+Processing files:   4%|▍         | 1/26 [00:40<06:49, 16.40s/it, segments=637, db_size=637]Processing files:   8%|▊         | 2/26 [00:40<08:15, 20.64s/it, segments=637, db_size=637]2025-10-15 10:14:27.662 | DEBUG    | scrambled_hacks.pipeline:build_database:108 - Segmenting DoeEye-IHateYou.wav
+2025-10-15 10:14:27.662 | INFO     | scrambled_hacks.segmentation.segmenter:segment_file:222 - Loading audio file: /Users/murr/Code/scrambled/test_audio/DoeEye-IHateYou.wav
+2025-10-15 10:14:27.723 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:78 - Converting 2-channel audio to mono
+2025-10-15 10:14:27.817 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:85 - Extracting tempo
+2025-10-15 10:14:28.390 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:89 - Detected tempo: 85.2 BPM
+2025-10-15 10:14:28.390 | DEBUG    | scrambled_hacks.segmentation.segmenter:segment_audio:95 - Detecting onsets with hop_length=512
+2025-10-15 10:14:28.630 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:128 - Detected 800 onsets
+2025-10-15 10:14:28.637 | INFO     | scrambled_hacks.segmentation.segmenter:segment_audio:196 - Created 800 segments
+2025-10-15 10:14:28.641 | DEBUG    | scrambled_hacks.pipeline:build_database:116 - Extracting embeddings for 800 segments
