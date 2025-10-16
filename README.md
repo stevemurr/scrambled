@@ -45,18 +45,6 @@ scrambled-hacks hello
 make verify-clap
 ```
 
-### Manual Installation
-
-If you prefer manual setup:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install torch torchvision torchaudio
-pip install -e .
-```
-
 ## CLI Usage
 
 The Scrambled Hacks CLI provides three main commands:
