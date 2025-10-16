@@ -126,6 +126,9 @@ class SimpleConcatenation(ReconstructionModule):
             if i > 0:
                 # Apply fade-in to beginning (except first segment)
                 fade_in = np.linspace(0, 1, effective_crossfade)
+                # Reshape fade for stereo compatibility: (samples,) -> (samples, 1)
+                if audio.ndim > 1:
+                    fade_in = fade_in.reshape(-1, 1)
                 audio[:effective_crossfade] *= fade_in
 
                 # Overlap with previous segment's fade-out
@@ -139,6 +142,9 @@ class SimpleConcatenation(ReconstructionModule):
                         # Get fade-out from previous segment
                         prev_fadeout = segments[i-1].audio[-effective_crossfade:].copy()
                         fade_out = np.linspace(1, 0, effective_crossfade)
+                        # Reshape fade for stereo compatibility: (samples,) -> (samples, 1)
+                        if prev_fadeout.ndim > 1:
+                            fade_out = fade_out.reshape(-1, 1)
                         prev_fadeout *= fade_out
 
                         # Mix fade-out with fade-in

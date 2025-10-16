@@ -92,8 +92,12 @@ class SegmentDatabase:
         faiss_id = self.index.ntotal  # ID is current size before adding
         self.index.add(embedding)
 
-        # Store metadata
-        self.metadata.append(segment.metadata.copy())
+        # Store metadata with audio retrieval information
+        metadata = segment.metadata.copy()
+        metadata['start_sample'] = segment.start_sample
+        metadata['end_sample'] = segment.end_sample
+        metadata['sr'] = segment.sr
+        self.metadata.append(metadata)
 
         logger.debug(f"Added segment with ID {faiss_id}")
         return faiss_id
@@ -132,9 +136,13 @@ class SegmentDatabase:
         start_id = self.index.ntotal
         self.index.add(embeddings)
 
-        # Store metadata
+        # Store metadata with audio retrieval information
         for seg in segments:
-            self.metadata.append(seg.metadata.copy())
+            metadata = seg.metadata.copy()
+            metadata['start_sample'] = seg.start_sample
+            metadata['end_sample'] = seg.end_sample
+            metadata['sr'] = seg.sr
+            self.metadata.append(metadata)
 
         faiss_ids = list(range(start_id, start_id + len(segments)))
         logger.info(f"Added {len(segments)} segments (IDs {start_id}-{start_id + len(segments) - 1})")

@@ -250,27 +250,39 @@ class ScrambledHacksPipeline:
                 f"(distance={best_distance:.4f})"
             )
 
-            # Create AudioSegment from metadata
-            # Note: In this simplified version, we retrieve from the original segments
-            # In production, you'd want to store audio separately and load it here
+            # Retrieve the actual audio segment from the source file
+            source_file = best_metadata['source_file']
+            start_sample = best_metadata['start_sample']
+            end_sample = best_metadata['end_sample']
+            segment_sr = best_metadata['sr']
 
-            # For now, we need to reconstruct the segment from stored data
-            # This is a limitation - we'll address it in Phase 2
-            # For POC, we'll use a placeholder approach
+            # Load the audio segment from the original file
+            try:
+                import soundfile as sf
+                audio_data, file_sr = sf.read(
+                    source_file,
+                    start=start_sample,
+                    stop=end_sample,
+                    always_2d=False
+                )
 
-            # Get the segment from database metadata
-            # Since we don't have audio stored separately yet, we'll create
-            # a placeholder that indicates this limitation
+                # Create AudioSegment from loaded audio
+                retrieved_segment = AudioSegment(
+                    audio=audio_data,
+                    start_sample=start_sample,
+                    end_sample=end_sample,
+                    sr=file_sr,
+                    metadata=best_metadata
+                )
+                retrieved_segments.append(retrieved_segment)
 
-            # TODO: In Phase 2, implement proper segment storage and retrieval
-            logger.warning(
-                "Using metadata-only retrieval. Full audio retrieval "
-                "will be implemented in Phase 2."
-            )
-
-            # For now, return the input segment as a placeholder
-            # This allows the pipeline to work end-to-end
-            retrieved_segments.append(input_segments[i])
+            except Exception as e:
+                logger.error(
+                    f"Failed to load segment from {source_file} "
+                    f"[{start_sample}:{end_sample}]: {e}"
+                )
+                # Fallback to input segment on error
+                retrieved_segments.append(input_segments[i])
 
         logger.info(f"Retrieved {len(retrieved_segments)} segments")
 
