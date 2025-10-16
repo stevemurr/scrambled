@@ -99,3 +99,5 @@ databases/
 
 # Rope (Python refactoring)
 .ropeproject/
+output
+test_audio
