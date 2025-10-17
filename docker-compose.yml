@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  scrambled-hacks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: scrambled-hacks:latest
+    container_name: scrambled-hacks
+
+    # Volumes for persistent data and development
+    volumes:
+      # Mount source code for development (edit on Mac, run in container)
+      - ./src:/workspace/src
+      - ./scripts:/workspace/scripts
+      - ./tests:/workspace/tests
+
+      # Persistent data directories
+      - ./databases:/workspace/databases
+      - ./test_audio:/workspace/test_audio
+      - ./output:/workspace/output
+
+      # Cache directories to speed up model downloads
+      - ~/.cache/huggingface:/root/.cache/huggingface
+      - ~/.cache/torch:/root/.cache/torch
+
+    # Ports for web interfaces (Gradio, etc.)
+    ports:
+      - "7860:7860"
+
+    # Keep container running for interactive use
+    stdin_open: true
+    tty: true
+
+    # Working directory
+    working_dir: /workspace
